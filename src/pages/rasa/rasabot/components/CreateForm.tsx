@@ -1,7 +1,7 @@
-import { Form, Input, Modal } from 'antd';
+import { Form, Input, Modal } from "antd";
 
-import { FormComponentProps } from 'antd/es/form';
-import React from 'react';
+import { FormComponentProps } from "antd/es/form";
+import React from "react";
 
 const FormItem = Form.Item;
 
@@ -27,10 +27,20 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Robot Name">
-        {form.getFieldDecorator('intentName', {
-          rules: [{ required: true, message: '请输入至少五个字符的Robot Name！', min: 5 }],
-        })(<Input placeholder="请输入" />)}
+      <FormItem
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 15 }}
+        label="Robot Name"
+      >
+        {form.getFieldDecorator("intentName", {
+          rules: [
+            {
+              required: true,
+              message: "Please input more than 6 characters in Robot Name！",
+              min: 5
+            }
+          ]
+        })(<Input placeholder="Please input" />)}
       </FormItem>
     </Modal>
   );

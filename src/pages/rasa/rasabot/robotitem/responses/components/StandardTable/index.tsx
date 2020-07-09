@@ -1,17 +1,17 @@
-import { Alert, Table } from 'antd';
-import { ColumnProps, TableRowSelection, TableProps } from 'antd/es/table';
-import React, { Component, Fragment } from 'react';
+import { Alert, Table } from "antd";
+import { ColumnProps, TableRowSelection, TableProps } from "antd/es/table";
+import React, { Component, Fragment } from "react";
 
-import { TableListItem } from '../../data.d';
-import styles from './index.less';
+import { TableListItem } from "../../data.d";
+import styles from "./index.less";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export interface StandardTableProps<T> extends Omit<TableProps<T>, 'columns'> {
+export interface StandardTableProps<T> extends Omit<TableProps<T>, "columns"> {
   columns: StandardTableColumnProps[];
   data: {
     list: TableListItem[];
-    pagination: StandardTableProps<TableListItem>['pagination'];
+    pagination: StandardTableProps<TableListItem>["pagination"];
   };
   selectedRows: TableListItem[];
   onSelectRow: (rows: any) => void;
@@ -40,14 +40,19 @@ interface StandardTableState {
   needTotalList: StandardTableColumnProps[];
 }
 
-class StandardTable extends Component<StandardTableProps<TableListItem>, StandardTableState> {
-  static getDerivedStateFromProps(nextProps: StandardTableProps<TableListItem>) {
+class StandardTable extends Component<
+  StandardTableProps<TableListItem>,
+  StandardTableState
+> {
+  static getDerivedStateFromProps(
+    nextProps: StandardTableProps<TableListItem>
+  ) {
     // clean state
     if (nextProps.selectedRows.length === 0) {
       const needTotalList = initTotalList(nextProps.columns);
       return {
         selectedRowKeys: [],
-        needTotalList,
+        needTotalList
       };
     }
     return null;
@@ -60,19 +65,22 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
 
     this.state = {
       selectedRowKeys: [],
-      needTotalList,
+      needTotalList
     };
   }
 
-  handleRowSelectChange: TableRowSelection<TableListItem>['onChange'] = (
+  handleRowSelectChange: TableRowSelection<TableListItem>["onChange"] = (
     selectedRowKeys,
-    selectedRows: TableListItem[],
+    selectedRows: TableListItem[]
   ) => {
     const currySelectedRowKeys = selectedRowKeys as string[];
     let { needTotalList } = this.state;
     needTotalList = needTotalList.map(item => ({
       ...item,
-      total: selectedRows.reduce((sum, val) => sum + parseFloat(val[item.dataIndex || 0]), 0),
+      total: selectedRows.reduce(
+        (sum, val) => sum + parseFloat(val[item.dataIndex || 0]),
+        0
+      )
     }));
     const { onSelectRow } = this.props;
     if (onSelectRow) {
@@ -82,7 +90,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
     this.setState({ selectedRowKeys: currySelectedRowKeys, needTotalList });
   };
 
-  handleTableChange: TableProps<TableListItem>['onChange'] = (
+  handleTableChange: TableProps<TableListItem>["onChange"] = (
     pagination,
     filters,
     sorter,
@@ -109,7 +117,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
       ? {
           showSizeChanger: true,
           showQuickJumper: true,
-          ...pagination,
+          ...pagination
         }
       : false;
 
@@ -117,8 +125,8 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
       getCheckboxProps: (record: TableListItem) => ({
-        disabled: record.disabled,
-      }),
+        disabled: record.disabled
+      })
     };
 
     return (
@@ -127,7 +135,9 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
           <Alert
             message={
               <Fragment>
-                已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
+                Choose{" "}
+                <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a>{" "}
+                项&nbsp;&nbsp;
                 {needTotalList.map((item, index) => (
                   <span style={{ marginLeft: 8 }} key={item.dataIndex}>
                     {item.title}
@@ -140,7 +150,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
                   </span>
                 ))}
                 <a onClick={this.cleanSelectedKeys} style={{ marginLeft: 24 }}>
-                  清空
+                  Empty
                 </a>
               </Fragment>
             }
@@ -149,7 +159,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
           />
         </div>
         <Table
-          rowKey={rowKey || 'key'}
+          rowKey={rowKey || "key"}
           rowSelection={rowSelection}
           dataSource={list}
           pagination={paginationProps}

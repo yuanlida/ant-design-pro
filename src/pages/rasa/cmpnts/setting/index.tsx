@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Form, Card, Row, Col, Select, Button, message } from 'antd';
-import { connect } from 'dva';
-import { RouteComponentProps } from 'react-router';
-import { FormComponentProps } from 'antd/es/form';
-import { Dispatch, Action } from 'redux';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { StateType } from './model';
-import styles from '../../rasabot/style.less';
+import React, { Component } from "react";
+import { Form, Card, Row, Col, Select, Button, message } from "antd";
+import { connect } from "dva";
+import { RouteComponentProps } from "react-router";
+import { FormComponentProps } from "antd/es/form";
+import { Dispatch, Action } from "redux";
+import { PageHeaderWrapper } from "@ant-design/pro-layout";
+import { StateType } from "./model";
+import styles from "../../rasabot/style.less";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -16,9 +16,16 @@ type IProps = {
 };
 
 // type TableListProps = FormComponentProps & RouteComponentProps<IProps>;
-interface SettingViewProps extends FormComponentProps, RouteComponentProps<IProps> {
+interface SettingViewProps
+  extends FormComponentProps,
+    RouteComponentProps<IProps> {
   dispatch: Dispatch<
-    Action<'rasaSetting/add' | 'rasaSetting/fetch' | 'rasaSetting/remove' | 'rasaSetting/update'>
+    Action<
+      | "rasaSetting/add"
+      | "rasaSetting/fetch"
+      | "rasaSetting/remove"
+      | "rasaSetting/update"
+    >
   >;
   loading: boolean;
   rasaSetting: StateType;
@@ -31,7 +38,7 @@ interface SettingViewState {
 @connect(
   ({
     rasaSetting,
-    loading,
+    loading
   }: {
     rasaSetting: StateType;
     loading: {
@@ -41,25 +48,25 @@ interface SettingViewState {
     };
   }) => ({
     rasaSetting,
-    loading: loading.models.rasaSetting,
-  }),
+    loading: loading.models.rasaSetting
+  })
 )
 class SettingView extends Component<SettingViewProps, SettingViewState> {
   selectMap: Map<string, string> = new Map<string, string>();
 
   state: SettingViewState = {
-    formValues: {},
+    formValues: {}
   };
 
   componentDidMount(): void {
     const { dispatch } = this.props;
-    this.selectMap.set('1', '1 minute');
-    this.selectMap.set('2', '2 minute');
-    this.selectMap.set('3', '3 minute');
-    this.selectMap.set('4', '4 minute');
+    this.selectMap.set("1", "1 minute");
+    this.selectMap.set("2", "2 minute");
+    this.selectMap.set("3", "3 minute");
+    this.selectMap.set("4", "4 minute");
 
     dispatch({
-      type: 'rasaSetting/fetch',
+      type: "rasaSetting/fetch"
     });
   }
 
@@ -73,25 +80,25 @@ class SettingView extends Component<SettingViewProps, SettingViewState> {
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf()
       };
 
       this.setState({
-        formValues: values,
+        formValues: values
       });
 
       dispatch({
-        type: 'rasaSetting/update',
-        payload: values,
+        type: "rasaSetting/update",
+        payload: values
       });
     });
-    message.success('修改完成');
+    message.success("Modify succeed");
   };
 
   renderSimpleForm() {
     const { form } = this.props;
     const {
-      rasaSetting: { data },
+      rasaSetting: { data }
       // loading,
     } = this.props;
     const { delayValue } = data;
@@ -106,15 +113,15 @@ class SettingView extends Component<SettingViewProps, SettingViewState> {
               wrapperCol={{ span: 15 }}
               label="Rasa status check poll interval"
             >
-              {getFieldDecorator('delayValue', {
-                initialValue: this.selectMap.get(delayValue.toString()),
+              {getFieldDecorator("delayValue", {
+                initialValue: this.selectMap.get(delayValue.toString())
               })(
                 <Select style={{ width: 120 }}>
-                  <Option value="1">{this.selectMap.get('1')}</Option>
-                  <Option value="2">{this.selectMap.get('2')}</Option>
-                  <Option value="3">{this.selectMap.get('3')}</Option>
-                  <Option value="4">{this.selectMap.get('4')}</Option>
-                </Select>,
+                  <Option value="1">{this.selectMap.get("1")}</Option>
+                  <Option value="2">{this.selectMap.get("2")}</Option>
+                  <Option value="3">{this.selectMap.get("3")}</Option>
+                  <Option value="4">{this.selectMap.get("4")}</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -136,7 +143,9 @@ class SettingView extends Component<SettingViewProps, SettingViewState> {
       <PageHeaderWrapper>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+            <div className={styles.tableListForm}>
+              {this.renderSimpleForm()}
+            </div>
           </div>
         </Card>
       </PageHeaderWrapper>
