@@ -1,37 +1,41 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Card, Button, message, Modal, Row, Col, Input } from 'antd';
-import { connect } from 'dva';
-import { RouteComponentProps } from 'react-router';
-import { FormComponentProps } from 'antd/es/form';
-import { Dispatch, Action } from 'redux';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { TableListItem, TableListPagination, TableListParams } from './data.d';
-import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
-import { StateType } from './model';
-import styles from '../../style.less';
-import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
-import { SorterResult } from 'antd/es/table';
+import React, { Component, Fragment } from "react";
+import { Form, Card, Button, message, Modal, Row, Col, Input } from "antd";
+import { connect } from "dva";
+import { RouteComponentProps } from "react-router";
+import { FormComponentProps } from "antd/es/form";
+import { Dispatch, Action } from "redux";
+import { PageHeaderWrapper } from "@ant-design/pro-layout";
+import { TableListItem, TableListPagination, TableListParams } from "./data.d";
+import StandardTable, {
+  StandardTableColumnProps
+} from "./components/StandardTable";
+import { StateType } from "./model";
+import styles from "../../style.less";
+import CreateForm from "./components/CreateForm";
+import UpdateForm, { FormValueType } from "./components/UpdateForm";
+import { SorterResult } from "antd/es/table";
 
 const FormItem = Form.Item;
 
 const getValue = (obj: { [x: string]: string[] }) =>
   Object.keys(obj)
     .map(key => obj[key])
-    .join(',');
+    .join(",");
 
 type IProps = {
   key: string | undefined;
 };
 
 // type TableListProps = FormComponentProps & RouteComponentProps<IProps>;
-interface TableListProps extends FormComponentProps, RouteComponentProps<IProps> {
+interface TableListProps
+  extends FormComponentProps,
+    RouteComponentProps<IProps> {
   dispatch: Dispatch<
     Action<
-      | 'robotItemRegex/add'
-      | 'robotItemRegex/fetch'
-      | 'robotItemRegex/remove'
-      | 'robotItemRegex/update'
+      | "robotItemRegex/add"
+      | "robotItemRegex/fetch"
+      | "robotItemRegex/remove"
+      | "robotItemRegex/update"
     >
   >;
   loading: boolean;
@@ -50,7 +54,7 @@ interface TableListState {
 @connect(
   ({
     robotItemRegex,
-    loading,
+    loading
   }: {
     robotItemRegex: StateType;
     loading: {
@@ -60,8 +64,8 @@ interface TableListState {
     };
   }) => ({
     robotItemRegex,
-    loading: loading.models.robotItemRegex,
-  }),
+    loading: loading.models.robotItemRegex
+  })
 )
 class TableList extends Component<TableListProps, TableListState> {
   state: TableListState = {
@@ -70,36 +74,38 @@ class TableList extends Component<TableListProps, TableListState> {
     expandForm: false,
     selectedRows: [],
     formValues: {},
-    stepFormValues: {},
+    stepFormValues: {}
   };
 
   columns: StandardTableColumnProps[] = [
     {
-      title: 'key',
-      dataIndex: 'key',
+      title: "key",
+      dataIndex: "key"
     },
     {
-      title: 'Regex name',
-      dataIndex: 'regexName',
+      title: "Regex name",
+      dataIndex: "regexName"
     },
     {
-      title: 'Regex Content',
-      dataIndex: 'regexContent',
+      title: "Regex Content",
+      dataIndex: "regexContent"
     },
     {
-      title: 'Action',
+      title: "Action",
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>Edit</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>
+            Edit
+          </a>
         </Fragment>
-      ),
-    },
+      )
+    }
   ];
 
   componentDidMount(): void {
     const { dispatch } = this.props;
     dispatch({
-      type: 'robotItemRegex/fetch',
+      type: "robotItemRegex/fetch"
     });
   }
 
@@ -107,24 +113,24 @@ class TableList extends Component<TableListProps, TableListState> {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
     Modal.confirm({
-      title: 'Delete Item',
-      content: 'Confirm to delete this item？',
-      okText: 'Yes',
-      cancelText: 'No',
+      title: "Delete Item",
+      content: "Confirm to delete this item？",
+      okText: "Yes",
+      cancelText: "No",
       onOk: () => {
         if (!selectedRows) return;
         dispatch({
-          type: 'robotItemRegex/remove',
+          type: "robotItemRegex/remove",
           payload: {
-            key: selectedRows.map(row => row.key),
+            key: selectedRows.map(row => row.key)
           },
           callback: () => {
             this.setState({
-              selectedRows: [],
+              selectedRows: []
             });
-          },
+          }
         });
-      },
+      }
     });
   };
 
@@ -138,16 +144,16 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf()
       };
 
       this.setState({
-        formValues: values,
+        formValues: values
       });
 
       dispatch({
-        type: 'robotItemRegex/fetch',
-        payload: values,
+        type: "robotItemRegex/fetch",
+        payload: values
       });
     });
   };
@@ -156,44 +162,44 @@ class TableList extends Component<TableListProps, TableListState> {
     const { form, dispatch } = this.props;
     form.resetFields();
     this.setState({
-      formValues: {},
+      formValues: {}
     });
     dispatch({
-      type: 'robotItemRegex/fetch',
-      payload: {},
+      type: "robotItemRegex/fetch",
+      payload: {}
     });
   };
 
   handleAdd = (fields: { regexName: any; regexContent: any }) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'robotItemRegex/add',
+      type: "robotItemRegex/add",
       payload: {
         regexName: fields.regexName,
-        regexContent: fields.regexContent,
-      },
+        regexContent: fields.regexContent
+      }
     });
 
-    message.success('添加成功');
+    message.success("Success");
     this.handleModalVisible();
   };
 
   handleModalVisible = (flag?: boolean) => {
     this.setState({
-      modalVisible: !!flag,
+      modalVisible: !!flag
     });
   };
 
   handleUpdateModalVisible = (flag?: boolean, record?: FormValueType) => {
     this.setState({
       updateModalVisible: !!flag,
-      stepFormValues: record || {},
+      stepFormValues: record || {}
     });
   };
 
   handleSelectRows = (rows: TableListItem[]) => {
     this.setState({
-      selectedRows: rows,
+      selectedRows: rows
     });
   };
 
@@ -203,17 +209,17 @@ class TableList extends Component<TableListProps, TableListState> {
 
     if (!selectedRows) return;
     switch (e.key) {
-      case 'remove':
+      case "remove":
         dispatch({
-          type: 'robotItemRegex/remove',
+          type: "robotItemRegex/remove",
           payload: {
-            key: selectedRows.map(row => row.key),
+            key: selectedRows.map(row => row.key)
           },
           callback: () => {
             this.setState({
-              selectedRows: [],
+              selectedRows: []
             });
-          },
+          }
         });
         break;
       default:
@@ -224,7 +230,7 @@ class TableList extends Component<TableListProps, TableListState> {
   handleStandardTableChange = (
     pagination: Partial<TableListPagination>,
     filtersArg: Record<keyof TableListItem, string[]>,
-    sorter: SorterResult<TableListItem>,
+    sorter: SorterResult<TableListItem>
   ) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
@@ -239,29 +245,29 @@ class TableList extends Component<TableListProps, TableListState> {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
-      ...filters,
+      ...filters
     };
     // if (sorter.field) {
     //   params.sorter = `${sorter.field}_${sorter.order}`;
     // }
 
     dispatch({
-      type: 'robotItemRegex/fetch',
-      payload: params,
+      type: "robotItemRegex/fetch",
+      payload: params
     });
   };
 
   handleUpdate = (fields: FormValueType) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'robotItemRegex/update',
+      type: "robotItemRegex/update",
       payload: {
         regexName: fields.regexName,
         regexContent: fields.regexContent,
-        key: fields.key,
-      },
+        key: fields.key
+      }
     });
-    message.success('配置成功');
+    message.success("Success");
     this.handleUpdateModalVisible();
   };
 
@@ -273,7 +279,9 @@ class TableList extends Component<TableListProps, TableListState> {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="Regex Name">
-              {getFieldDecorator('regexName')(<Input placeholder="请输入" />)}
+              {getFieldDecorator("regexName")(
+                <Input placeholder="please enter" />
+              )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -295,23 +303,30 @@ class TableList extends Component<TableListProps, TableListState> {
     // const { key } = this.props.match.params;
     const {
       robotItemRegex: { data },
-      loading,
+      loading
     } = this.props;
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+    const {
+      selectedRows,
+      modalVisible,
+      updateModalVisible,
+      stepFormValues
+    } = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
-      handleModalVisible: this.handleModalVisible,
+      handleModalVisible: this.handleModalVisible
     };
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
-      handleUpdate: this.handleUpdate,
+      handleUpdate: this.handleUpdate
     };
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+            <div className={styles.tableListForm}>
+              {this.renderSimpleForm()}
+            </div>
             <div className={styles.tableListOperator}>
               <Button
                 icon="plus"

@@ -1,22 +1,26 @@
-import { Button, Card, Form, Icon, Popover } from 'antd';
-import React, { Component } from 'react';
+import { Button, Card, Form, Icon, Popover } from "antd";
+import React, { Component } from "react";
 
-import { Dispatch, Action } from 'redux';
-import { FormComponentProps } from 'antd/es/form';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { connect } from 'dva';
-import TableForm from './components/TableForm';
-import FooterToolbar from './components/FooterToolbar';
-import styles from './style.less';
-import { RouteComponentProps } from 'react-router';
-import { StateType } from './model';
+import { Dispatch, Action } from "redux";
+import { FormComponentProps } from "antd/es/form";
+import { PageHeaderWrapper } from "@ant-design/pro-layout";
+import { connect } from "dva";
+import TableForm from "./components/TableForm";
+import FooterToolbar from "./components/FooterToolbar";
+import styles from "./style.less";
+import { RouteComponentProps } from "react-router";
+import { StateType } from "./model";
 
 type IProps = {
   key: string | undefined;
 };
 
-interface AdvancedFormProps extends FormComponentProps, RouteComponentProps<IProps> {
-  dispatch: Dispatch<Action<'rasaActions/submitActionStatus' | 'rasaActions/getAllActions'>>;
+interface AdvancedFormProps
+  extends FormComponentProps,
+    RouteComponentProps<IProps> {
+  dispatch: Dispatch<
+    Action<"rasaActions/submitActionStatus" | "rasaActions/getAllActions">
+  >;
   loading: boolean;
   rasaActions: StateType;
 }
@@ -29,7 +33,7 @@ interface TableListState {
 @connect(
   ({
     rasaActions,
-    loading,
+    loading
   }: {
     rasaActions: StateType;
     loading: {
@@ -39,31 +43,33 @@ interface TableListState {
     };
   }) => ({
     rasaActions,
-    loading: loading.models.rasaActions,
-  }),
+    loading: loading.models.rasaActions
+  })
 )
 class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
   state = {
-    intentsJson: '',
-    width: '100%',
+    intentsJson: "",
+    width: "100%"
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
-    window.addEventListener('resize', this.resizeFooterToolbar, { passive: true });
+    window.addEventListener("resize", this.resizeFooterToolbar, {
+      passive: true
+    });
     this.resizeFooterToolbar();
     dispatch({
-      type: 'rasaActions/getAllActions',
+      type: "rasaActions/getAllActions"
     });
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.resizeFooterToolbar);
+    window.removeEventListener("resize", this.resizeFooterToolbar);
   }
 
   getErrorInfo = () => {
     const {
-      form: { getFieldsError },
+      form: { getFieldsError }
     } = this.props;
     const errors = getFieldsError();
     const errorCount = Object.keys(errors).filter(key => errors[key]).length;
@@ -82,7 +88,11 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
       }
       const errorMessage = errors[key] || [];
       return (
-        <li key={key} className={styles.errorListItem} onClick={() => scrollToField(key)}>
+        <li
+          key={key}
+          className={styles.errorListItem}
+          onClick={() => scrollToField(key)}
+        >
           <Icon type="cross-circle-o" className={styles.errorIcon} />
           <div className={styles.errorMessage}>{errorMessage[0]}</div>
         </li>
@@ -91,7 +101,7 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
     return (
       <span className={styles.errorIcon}>
         <Popover
-          title="表单校验信息"
+          title="Form verification information"
           content={errorList}
           overlayClassName={styles.errorPopover}
           trigger="click"
@@ -111,7 +121,9 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
 
   resizeFooterToolbar = () => {
     requestAnimationFrame(() => {
-      const sider = document.querySelectorAll('.ant-layout-sider')[0] as HTMLDivElement;
+      const sider = document.querySelectorAll(
+        ".ant-layout-sider"
+      )[0] as HTMLDivElement;
       if (sider) {
         const width = `calc(100% - ${sider.style.width})`;
         const { width: stateWidth } = this.state;
@@ -125,14 +137,14 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
   validate = () => {
     const {
       form: { validateFieldsAndScroll },
-      dispatch,
+      dispatch
     } = this.props;
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         // submit the values
         dispatch({
-          type: 'rasaActions/submitActionStatus',
-          payload: values,
+          type: "rasaActions/submitActionStatus",
+          payload: values
         });
       }
     });
@@ -142,7 +154,7 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
     const {
       rasaActions: { data },
       form: { getFieldDecorator },
-      loading,
+      loading
     } = this.props;
     const { width } = this.state;
     return (
@@ -150,8 +162,8 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
         <PageHeaderWrapper>
           <Card title="Actions ..." bordered={false}>
             {data !== undefined
-              ? getFieldDecorator('members', {
-                  initialValue: data.list,
+              ? getFieldDecorator("members", {
+                  initialValue: data.list
                 })(<TableForm />)
               : null}
           </Card>
@@ -159,7 +171,7 @@ class AdvancedForm extends Component<AdvancedFormProps, TableListState> {
         <FooterToolbar style={{ width }}>
           {this.getErrorInfo()}
           <Button type="primary" onClick={this.validate} loading={loading}>
-            提交
+            Submit
           </Button>
         </FooterToolbar>
       </>

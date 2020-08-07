@@ -11,12 +11,12 @@ for (let i = 0; i < 20; i += 1) {
     robotId: 1,
     synonymsName: `synonymsName_${i}`,
     synonymsContent: [
-      `regexContent_${i}, `,
-      `regexContenta_${i}, `,
-      `regexContentb_${i}, `,
-      `regexContentc_${i}, `,
-      `regexContentd_${i}, `,
-      `regexContente_${i}, `
+      `regexContent_${i}`,
+      `, regexContenta_${i}`,
+      `, regexContentb_${i}`,
+      `, regexContentc_${i}`,
+      `, regexContentd_${i}`,
+      `, regexContente_${i}`
     ],
     disabled: false
   });

@@ -137,11 +137,11 @@ class StandardTable extends Component<
               <Fragment>
                 Choose{" "}
                 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a>{" "}
-                项&nbsp;&nbsp;
+                item&nbsp;&nbsp;
                 {needTotalList.map((item, index) => (
                   <span style={{ marginLeft: 8 }} key={item.dataIndex}>
                     {item.title}
-                    总计&nbsp;
+                    total&nbsp;
                     <span style={{ fontWeight: 600 }}>
                       {item.render
                         ? item.render(item.total, item as TableListItem, index)

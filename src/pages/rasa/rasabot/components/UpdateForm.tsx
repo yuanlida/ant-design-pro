@@ -205,40 +205,40 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
     if (currentStep === 1) {
       return [
         <Button key="back" style={{ float: "left" }} onClick={this.backward}>
-          上一步
+          Previous
         </Button>,
         <Button
           key="cancel"
           onClick={() => handleUpdateModalVisible(false, values)}
         >
-          取消
+          cancel
         </Button>,
         <Button
           key="forward"
           type="primary"
           onClick={() => this.handleNext(currentStep)}
         >
-          下一步
+          Next
         </Button>
       ];
     }
     if (currentStep === 2) {
       return [
         <Button key="back" style={{ float: "left" }} onClick={this.backward}>
-          上一步
+          Previous
         </Button>,
         <Button
           key="cancel"
           onClick={() => handleUpdateModalVisible(false, values)}
         >
-          取消
+          Cancel
         </Button>,
         <Button
           key="submit"
           type="primary"
           onClick={() => this.handleNext(currentStep)}
         >
-          完成
+          Submit
         </Button>
       ];
     }
@@ -247,14 +247,14 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
         key="cancel"
         onClick={() => handleUpdateModalVisible(false, values)}
       >
-        取消
+        Cancel
       </Button>,
       <Button
         key="forward"
         type="primary"
         onClick={() => this.handleNext(currentStep)}
       >
-        下一步
+        Next
       </Button>
     ];
   };
@@ -268,7 +268,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
         width={640}
         bodyStyle={{ padding: "32px 40px 48px" }}
         destroyOnClose
-        title="规则配置"
+        title="Configuration"
         visible={updateModalVisible}
         footer={this.renderFooter(currentStep)}
         onCancel={() => handleUpdateModalVisible(false, values)}

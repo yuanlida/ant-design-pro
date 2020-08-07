@@ -172,16 +172,25 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleAdd = (fields: { synonymsName: any; synonymsContent: any }) => {
+    let temp: any = fields.synonymsContent;
+    let i: number = 1;
+    if (temp[0].charAt(0) === ",") {
+      temp[0] = temp[0].slice(2);
+    }
+    while (i < temp.length) {
+      temp[i] = ", " + temp[i];
+      i = i + 1;
+    }
     const { dispatch } = this.props;
     dispatch({
       type: "robotSynonyms/add",
       payload: {
         synonymsName: fields.synonymsName,
-        synonymsContent: fields.synonymsContent + ", "
+        synonymsContent: temp
       }
     });
 
-    message.success("添加成功");
+    message.success("success");
     this.handleModalVisible();
   };
 
@@ -259,17 +268,28 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleUpdate = (fields: FormValueType) => {
-    const { dispatch } = this.props;
     console.log(fields.synonymsContent);
+    const { dispatch } = this.props;
+    let temp: any = fields.synonymsContent;
+    let i: number = 1;
+    if (temp[0].charAt(0) === ",") {
+      temp[0] = temp[0].slice(2);
+    }
+    while (i < temp.length) {
+      if (temp[i].charAt(0) !== ",") {
+        temp[i] = ", " + temp[i];
+      }
+      i = i + 1;
+    }
     dispatch({
       type: "robotSynonyms/update",
       payload: {
         synonymsName: fields.synonymsName,
-        synonymsContent: fields.synonymsContent + ", ",
+        synonymsContent: fields.synonymsContent,
         key: fields.key
       }
     });
-    message.success("配置成功");
+    message.success("success");
     this.handleUpdateModalVisible();
   };
 
@@ -282,7 +302,7 @@ class TableList extends Component<TableListProps, TableListState> {
           <Col md={8} sm={24}>
             <FormItem label="Synonyms Name">
               {getFieldDecorator("synonymsName")(
-                <Input placeholder="请输入" />
+                <Input placeholder="please enter" />
               )}
             </FormItem>
           </Col>

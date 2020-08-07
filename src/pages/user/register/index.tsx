@@ -1,14 +1,24 @@
-import { Button, Col, Form, Input, Popover, Progress, Row, Select, message } from 'antd';
-import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import React, { Component } from 'react';
-import { Dispatch } from 'redux';
-import { FormComponentProps } from 'antd/es/form';
-import Link from 'umi/link';
-import { connect } from 'dva';
-import router from 'umi/router';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Popover,
+  Progress,
+  Row,
+  Select,
+  message
+} from "antd";
+import { FormattedMessage, formatMessage } from "umi-plugin-react/locale";
+import React, { Component } from "react";
+import { Dispatch } from "redux";
+import { FormComponentProps } from "antd/es/form";
+import Link from "umi/link";
+import { connect } from "dva";
+import router from "umi/router";
 
-import { StateType } from './model';
-import styles from './style.less';
+import { StateType } from "./model";
+import styles from "./style.less";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -29,17 +39,17 @@ const passwordStatusMap = {
     <div className={styles.error}>
       <FormattedMessage id="userandregister.strength.short" />
     </div>
-  ),
+  )
 };
 
 const passwordProgressMap: {
-  ok: 'success';
-  pass: 'normal';
-  poor: 'exception';
+  ok: "success";
+  pass: "normal";
+  poor: "exception";
 } = {
-  ok: 'success',
-  pass: 'normal',
-  poor: 'exception',
+  ok: "success",
+  pass: "normal",
+  poor: "exception"
 };
 
 interface RegisterProps extends FormComponentProps {
@@ -67,7 +77,7 @@ export interface UserRegisterParams {
 @connect(
   ({
     userAndregister,
-    loading,
+    loading
   }: {
     userAndregister: StateType;
     loading: {
@@ -77,30 +87,30 @@ export interface UserRegisterParams {
     };
   }) => ({
     userAndregister,
-    submitting: loading.effects['userAndregister/submit'],
-  }),
+    submitting: loading.effects["userAndregister/submit"]
+  })
 )
 class Register extends Component<RegisterProps, RegisterState> {
   state: RegisterState = {
     count: 0,
     confirmDirty: false,
     visible: false,
-    help: '',
-    prefix: '86',
+    help: "",
+    prefix: "86"
   };
 
   interval: number | undefined = undefined;
 
   componentDidUpdate() {
     const { userAndregister, form } = this.props;
-    const account = form.getFieldValue('mail');
-    if (userAndregister.status === 'ok') {
-      message.success('注册成功！');
+    const account = form.getFieldValue("mail");
+    if (userAndregister.status === "ok") {
+      message.success("Successfully registered components！");
       router.push({
-        pathname: '/user/register-result',
+        pathname: "/user/register-result",
         state: {
-          account,
-        },
+          account
+        }
       });
     }
   }
@@ -123,14 +133,14 @@ class Register extends Component<RegisterProps, RegisterState> {
 
   getPasswordStatus = () => {
     const { form } = this.props;
-    const value = form.getFieldValue('password');
+    const value = form.getFieldValue("password");
     if (value && value.length > 9) {
-      return 'ok';
+      return "ok";
     }
     if (value && value.length > 5) {
-      return 'pass';
+      return "pass";
     }
-    return 'poor';
+    return "poor";
   };
 
   handleSubmit = (e: React.FormEvent) => {
@@ -140,48 +150,56 @@ class Register extends Component<RegisterProps, RegisterState> {
       if (!err) {
         const { prefix } = this.state;
         dispatch({
-          type: 'userAndregister/submit',
+          type: "userAndregister/submit",
           payload: {
             ...values,
-            prefix,
-          },
+            prefix
+          }
         });
       }
     });
   };
 
-  checkConfirm = (rule: any, value: string, callback: (messgae?: string) => void) => {
+  checkConfirm = (
+    rule: any,
+    value: string,
+    callback: (messgae?: string) => void
+  ) => {
     const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
-      callback(formatMessage({ id: 'userandregister.password.twice' }));
+    if (value && value !== form.getFieldValue("password")) {
+      callback(formatMessage({ id: "userandregister.password.twice" }));
     } else {
       callback();
     }
   };
 
-  checkPassword = (rule: any, value: string, callback: (messgae?: string) => void) => {
+  checkPassword = (
+    rule: any,
+    value: string,
+    callback: (messgae?: string) => void
+  ) => {
     const { visible, confirmDirty } = this.state;
     if (!value) {
       this.setState({
-        help: formatMessage({ id: 'userandregister.password.required' }),
-        visible: !!value,
+        help: formatMessage({ id: "userandregister.password.required" }),
+        visible: !!value
       });
-      callback('error');
+      callback("error");
     } else {
       this.setState({
-        help: '',
+        help: ""
       });
       if (!visible) {
         this.setState({
-          visible: !!value,
+          visible: !!value
         });
       }
       if (value.length < 6) {
-        callback('error');
+        callback("error");
       } else {
         const { form } = this.props;
         if (value && confirmDirty) {
-          form.validateFields(['confirm'], { force: true });
+          form.validateFields(["confirm"], { force: true });
         }
         callback();
       }
@@ -190,13 +208,13 @@ class Register extends Component<RegisterProps, RegisterState> {
 
   changePrefix = (value: string) => {
     this.setState({
-      prefix: value,
+      prefix: value
     });
   };
 
   renderPasswordProgress = () => {
     const { form } = this.props;
-    const value = form.getFieldValue('password');
+    const value = form.getFieldValue("password");
     const passwordStatus = this.getPasswordStatus();
     return value && value.length ? (
       <div className={styles[`progress-${passwordStatus}`]}>
@@ -222,22 +240,28 @@ class Register extends Component<RegisterProps, RegisterState> {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator("mail", {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'userandregister.email.required' }),
+                  message: formatMessage({
+                    id: "userandregister.email.required"
+                  })
                 },
                 {
-                  type: 'email',
-                  message: formatMessage({ id: 'userandregister.email.wrong-format' }),
-                },
-              ],
+                  type: "email",
+                  message: formatMessage({
+                    id: "userandregister.email.wrong-format"
+                  })
+                }
+              ]
             })(
               <Input
                 size="large"
-                placeholder={formatMessage({ id: 'userandregister.email.placeholder' })}
-              />,
+                placeholder={formatMessage({
+                  id: "userandregister.email.placeholder"
+                })}
+              />
             )}
           </FormItem>
           <FormItem help={help}>
@@ -249,7 +273,7 @@ class Register extends Component<RegisterProps, RegisterState> {
                 return node;
               }}
               content={
-                <div style={{ padding: '4px 0' }}>
+                <div style={{ padding: "4px 0" }}>
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
@@ -261,38 +285,44 @@ class Register extends Component<RegisterProps, RegisterState> {
               placement="right"
               visible={visible}
             >
-              {getFieldDecorator('password', {
+              {getFieldDecorator("password", {
                 rules: [
                   {
-                    validator: this.checkPassword,
-                  },
-                ],
+                    validator: this.checkPassword
+                  }
+                ]
               })(
                 <Input
                   size="large"
                   type="password"
-                  placeholder={formatMessage({ id: 'userandregister.password.placeholder' })}
-                />,
+                  placeholder={formatMessage({
+                    id: "userandregister.password.placeholder"
+                  })}
+                />
               )}
             </Popover>
           </FormItem>
           <FormItem>
-            {getFieldDecorator('confirm', {
+            {getFieldDecorator("confirm", {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'userandregister.confirm-password.required' }),
+                  message: formatMessage({
+                    id: "userandregister.confirm-password.required"
+                  })
                 },
                 {
-                  validator: this.checkConfirm,
-                },
-              ],
+                  validator: this.checkConfirm
+                }
+              ]
             })(
               <Input
                 size="large"
                 type="password"
-                placeholder={formatMessage({ id: 'userandregister.confirm-password.placeholder' })}
-              />,
+                placeholder={formatMessage({
+                  id: "userandregister.confirm-password.placeholder"
+                })}
+              />
             )}
           </FormItem>
           <FormItem>
@@ -301,48 +331,56 @@ class Register extends Component<RegisterProps, RegisterState> {
                 size="large"
                 value={prefix}
                 onChange={this.changePrefix}
-                style={{ width: '20%' }}
+                style={{ width: "20%" }}
               >
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
               </Select>
-              {getFieldDecorator('mobile', {
+              {getFieldDecorator("mobile", {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'userandregister.phone-number.required' }),
+                    message: formatMessage({
+                      id: "userandregister.phone-number.required"
+                    })
                   },
                   {
                     pattern: /^\d{11}$/,
-                    message: formatMessage({ id: 'userandregister.phone-number.wrong-format' }),
-                  },
-                ],
+                    message: formatMessage({
+                      id: "userandregister.phone-number.wrong-format"
+                    })
+                  }
+                ]
               })(
                 <Input
                   size="large"
-                  style={{ width: '80%' }}
-                  placeholder={formatMessage({ id: 'userandregister.phone-number.placeholder' })}
-                />,
+                  style={{ width: "80%" }}
+                  placeholder={formatMessage({
+                    id: "userandregister.phone-number.placeholder"
+                  })}
+                />
               )}
             </InputGroup>
           </FormItem>
           <FormItem>
             <Row gutter={8}>
               <Col span={16}>
-                {getFieldDecorator('captcha', {
+                {getFieldDecorator("captcha", {
                   rules: [
                     {
                       required: true,
-                      message: formatMessage({ id: 'userandregister.verification-code.required' }),
-                    },
-                  ],
+                      message: formatMessage({
+                        id: "userandregister.verification-code.required"
+                      })
+                    }
+                  ]
                 })(
                   <Input
                     size="large"
                     placeholder={formatMessage({
-                      id: 'userandregister.verification-code.placeholder',
+                      id: "userandregister.verification-code.placeholder"
                     })}
-                  />,
+                  />
                 )}
               </Col>
               <Col span={8}>
@@ -354,7 +392,9 @@ class Register extends Component<RegisterProps, RegisterState> {
                 >
                   {count
                     ? `${count} s`
-                    : formatMessage({ id: 'userandregister.register.get-verification-code' })}
+                    : formatMessage({
+                        id: "userandregister.register.get-verification-code"
+                      })}
                 </Button>
               </Col>
             </Row>

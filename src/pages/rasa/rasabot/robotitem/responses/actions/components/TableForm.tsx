@@ -1,11 +1,19 @@
-import { Button, Divider, Input, Popconfirm, Table, message, Select } from 'antd';
-import React, { Fragment, PureComponent } from 'react';
-import isEqual from 'lodash.isequal';
-import { connect } from 'dva';
-import { Dispatch, Action } from 'redux';
-import { FormComponentProps } from 'antd/es/form';
-import { StateType } from '../model';
-import styles from '../style.less';
+import {
+  Button,
+  Divider,
+  Input,
+  Popconfirm,
+  Table,
+  message,
+  Select
+} from "antd";
+import React, { Fragment, PureComponent } from "react";
+import isEqual from "lodash.isequal";
+import { connect } from "dva";
+import { Dispatch, Action } from "redux";
+import { FormComponentProps } from "antd/es/form";
+import { StateType } from "../model";
+import styles from "../style.less";
 
 const { Option } = Select;
 
@@ -16,7 +24,7 @@ interface TableFormDateType {
   editable?: boolean;
 }
 interface TableFormProps extends Partial<FormComponentProps> {
-  dispatch?: Dispatch<Action<'intentExpressions/getIntentsJson'>>;
+  dispatch?: Dispatch<Action<"intentExpressions/getIntentsJson">>;
   intentExpressions?: StateType;
   loading?: boolean;
   value?: TableFormDateType[];
@@ -33,7 +41,7 @@ interface TableFormState {
 @connect(
   ({
     intentExpressions,
-    loading,
+    loading
   }: {
     intentExpressions: StateType;
     loading: {
@@ -43,17 +51,20 @@ interface TableFormState {
     };
   }) => ({
     intentExpressions,
-    loading: loading.models.intentExpressions,
-  }),
+    loading: loading.models.intentExpressions
+  })
 )
 class TableForm extends PureComponent<TableFormProps, TableFormState> {
-  static getDerivedStateFromProps(nextProps: TableFormProps, preState: TableFormState) {
+  static getDerivedStateFromProps(
+    nextProps: TableFormProps,
+    preState: TableFormState
+  ) {
     if (isEqual(nextProps.value, preState.value)) {
       return null;
     }
     return {
       data: nextProps.value,
-      value: nextProps.value,
+      value: nextProps.value
     };
   }
 
@@ -65,44 +76,50 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
 
   columns = [
     {
-      title: 'Action Content',
-      dataIndex: 'expression',
-      key: 'expression',
-      width: '40%',
+      title: "Action Content",
+      dataIndex: "expression",
+      key: "expression",
+      width: "40%",
       render: (text: string, record: TableFormDateType) => {
         if (record.editable) {
           return (
             <Input
               value={text}
-              onChange={e => this.handleFieldChange(e, 'expression', record.key)}
+              onChange={e =>
+                this.handleFieldChange(e, "expression", record.key)
+              }
               onKeyPress={e => this.handleKeyPress(e, record.key)}
               placeholder="Actions..."
             />
           );
         }
         return text;
-      },
+      }
     },
     {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-      width: '40%',
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+      width: "40%",
       render: (text: string, record: TableFormDateType) => {
         if (record.editable) {
           return (
-            <Select defaultValue={text} style={{ width: 120 }} onChange={() => {}}>
+            <Select
+              defaultValue={text}
+              style={{ width: 120 }}
+              onChange={() => {}}
+            >
               <Option value="buttons">buttons</Option>
               <Option value="text">text</Option>
             </Select>
           );
         }
         return text;
-      },
+      }
     },
     {
-      title: 'Actions',
-      key: 'action',
+      title: "Actions",
+      key: "action",
       render: (text: string, record: TableFormDateType) => {
         const { loading } = this.state;
         if (!!record.editable && loading) {
@@ -114,7 +131,10 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
               <span>
                 <a onClick={e => this.saveRow(e, record.key)}>Add</a>
                 <Divider type="vertical" />
-                <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+                <Popconfirm
+                  title="Do you want to delete this line？"
+                  onConfirm={() => this.remove(record.key)}
+                >
                   <a>Delete</a>
                 </Popconfirm>
               </span>
@@ -132,13 +152,16 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
           <span>
             <a onClick={e => this.toggleEditable(e, record.key)}>Edit</a>
             <Divider type="vertical" />
-            <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+            <Popconfirm
+              title="Do you want to delete this line？"
+              onConfirm={() => this.remove(record.key)}
+            >
               <a>Delete</a>
             </Popconfirm>
           </span>
         );
-      },
-    },
+      }
+    }
   ];
 
   constructor(props: TableFormProps) {
@@ -147,7 +170,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
       data: props.value,
       loading: false,
       value: props.value,
-      intentJsonShow: false,
+      intentJsonShow: false
     };
   }
 
@@ -162,7 +185,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
     if (target) {
-      // 进入编辑状态时保存原始数据
+      // Save the original data when entering the editing state
       if (!target.editable) {
         this.cacheOriginData[key] = { ...target };
       }
@@ -176,9 +199,9 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
     const newData = data.map(item => ({ ...item }));
     newData.push({
       key: `NEW_TEMP_ID_${this.index}`,
-      expression: '',
+      expression: "",
       editable: true,
-      isNew: true,
+      isNew: true
     });
     this.index += 1;
     this.setState({ data: newData });
@@ -186,7 +209,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
 
   intentJsonClose = () => {
     this.setState({
-      intentJsonShow: false,
+      intentJsonShow: false
     });
   };
 
@@ -201,12 +224,16 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
   }
 
   handleKeyPress(e: React.KeyboardEvent, key: string) {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       this.saveRow(e, key);
     }
   }
 
-  handleFieldChange(e: React.ChangeEvent<HTMLInputElement>, fieldName: string, key: string) {
+  handleFieldChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: string,
+    key: string
+  ) {
     const { data = [] } = this.state;
     const newData = [...data];
     const target = this.getRowByKey(key, newData);
@@ -219,7 +246,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
   saveRow(e: React.MouseEvent | React.KeyboardEvent, key: string) {
     e.persist();
     this.setState({
-      loading: true,
+      loading: true
     });
     setTimeout(() => {
       if (this.clickedCancel) {
@@ -228,10 +255,10 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
       }
       const target = this.getRowByKey(key) || {};
       if (!target.expression) {
-        message.error('请填写完整成员信息。');
+        message.error("Please fill in complete member information");
         (e.target as HTMLInputElement).focus();
         this.setState({
-          loading: false,
+          loading: false
         });
         return;
       }
@@ -243,7 +270,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
         onChange(data);
       }
       this.setState({
-        loading: false,
+        loading: false
       });
     }, 500);
   }
@@ -253,7 +280,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
     e.preventDefault();
     const { data = [] } = this.state;
     const newData = [...data];
-    // 编辑前的原始数据
+    // Raw data before editing
     let cacheOriginData = [];
     cacheOriginData = newData.map(item => {
       if (item.key === key) {
@@ -261,7 +288,7 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
           const originItem = {
             ...item,
             ...this.cacheOriginData[key],
-            editable: false,
+            editable: false
           };
           delete this.cacheOriginData[key];
           return originItem;
@@ -283,10 +310,10 @@ class TableForm extends PureComponent<TableFormProps, TableFormState> {
           columns={this.columns}
           dataSource={data}
           pagination={false}
-          rowClassName={record => (record.editable ? styles.editable : '')}
+          rowClassName={record => (record.editable ? styles.editable : "")}
         />
         <Button
-          style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
+          style={{ width: "100%", marginTop: 16, marginBottom: 8 }}
           type="dashed"
           onClick={this.newMember}
           icon="plus"

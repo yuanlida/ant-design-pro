@@ -1,9 +1,9 @@
-@import '~antd/es/style/themes/default.less';
+@import "~antd/es/style/themes/default.less";
 
 html,
 body {
   margin: 0;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
 }
 
 h1 {
@@ -15,9 +15,9 @@ h2 {
 }
 
 .container {
-  max-width: 850px;
-  margin: 0 auto;
-  margin: 100px;
+  height: 600px;
+  width: 100%;
+  border-bottom: 2px solid #ddd;
 }
 
 .install {
@@ -32,13 +32,79 @@ input:focus {
   outline: none;
 }
 
-.chatfeed-wrapper {
-  max-width: 450px;
-  margin: 0 auto;
-  padding-bottom: 20px;
+.right {
+  height: 100%;
+  width: 40%;
+  float: right;
+}
+
+.left {
+  height: 100%;
+  width: 60%;
+  border-right: 1px solid #ddd;
+  float: left;
+}
+
+.chat {
+  width: 100%;
+  height: 86%;
+  padding-right: 5%;
+}
+
+.formContainer {
+  width: 100%;
+  height: 14%;
+  bottom: 0px;
+  left: 0px;
+  background-color: white;
+  border-top: 1px solid #ddd;
+}
+
+.form {
+  width: 80%;
+  height: 100%;
+  float: left;
+}
+
+.reset {
+  width: 8%;
+  height: 40%;
+  margin-top: 4.5%;
+  border: white;
+}
+
+.storyContainer {
+  text-align: center;
+  width: 100%;
+  height: 35%;
+  margin: 5%;
+}
+
+.story {
+  text-align: left;
+  width: 95%;
+  height: 80%;
+  padding: 5%;
+  margin-top: 2%;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 20px 20px rgb(0, 0, 0, 0.08);
+  border-radius: 25px;
+}
+
+.optionContainer {
+  text-align: center;
+  width: 100%;
+  height: 60%;
+  margin: 5%;
+}
+
+.optional {
+  text-align: left;
+  width: 95%;
+  height: 80%;
+  padding: 5%;
+  margin-top: 2%;
+  border: 1px solid #ddd;
+  border-radius: 25px;
 }
 
 #chat-panel {
@@ -62,8 +128,7 @@ input:focus {
 
 .messageinput {
   width: 100%;
-  padding: 30px;
   font-size: 16px;
   border: none;
-  border-top: 1px solid #ddd;
+  padding: 29px;
 }

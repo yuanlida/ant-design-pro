@@ -1,7 +1,7 @@
-import { Form, Input, Modal } from 'antd';
+import { Form, Input, Modal } from "antd";
 
-import { FormComponentProps } from 'antd/es/form';
-import React from 'react';
+import { FormComponentProps } from "antd/es/form";
+import React from "react";
 
 const FormItem = Form.Item;
 
@@ -28,10 +28,20 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 7 }} wrapperCol={{ span: 13 }} label="Story Name">
-        {form.getFieldDecorator('storyName', {
-          rules: [{ required: true, message: '请输入至少一个字符的story Name！', min: 1 }],
-        })(<Input style={{ float: 'left' }} placeholder="请输入" />)}
+      <FormItem
+        labelCol={{ span: 7 }}
+        wrapperCol={{ span: 13 }}
+        label="Story Name"
+      >
+        {form.getFieldDecorator("storyName", {
+          rules: [
+            {
+              required: true,
+              message: "Please enter at least one character",
+              min: 1
+            }
+          ]
+        })(<Input style={{ float: "left" }} placeholder="请输入" />)}
       </FormItem>
     </Modal>
   );

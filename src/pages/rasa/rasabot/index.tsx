@@ -165,8 +165,6 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   }
 
-  handleOtherProcess = (key: string, currentItem: number) => {};
-
   handleStandardTableChange = (
     pagination: Partial<TableListPagination>,
     filterArgs: Record<keyof TableListItem, string[]>,

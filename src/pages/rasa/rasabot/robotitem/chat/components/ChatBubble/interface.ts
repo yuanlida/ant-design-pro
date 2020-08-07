@@ -1,4 +1,9 @@
-import Message from '../Message';
+import Message from "../Message";
+import { Dispatch, Action } from "redux";
+
+interface BubbleState {
+  data: Message;
+}
 
 export default interface ChatBubbleProps {
   message: Message;
@@ -8,4 +13,14 @@ export default interface ChatBubbleProps {
     text: object;
   };
   bubblesCentered: boolean;
+  dispatch: Dispatch<
+    Action<
+      | "robotItemChat/add"
+      | "robotItemChat/fetch"
+      | "robotItemChat/remove"
+      | "robotItemChat/update"
+    >
+  >;
+  loading: boolean;
+  robotItemChat: BubbleState;
 }
